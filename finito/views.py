@@ -1,17 +1,23 @@
-import json
+from FINITO_FEM_TOOLBOX import MEF1D, GET_VALUE_FROM_TXT_MEF1D_FINITO as gt
 from django.http import HttpResponse
-import sys
+from django.http import JsonResponse
+from io import StringIO
 import numpy
+import time
 import os
-from FINITO_FEM_TOOLBOX import MEF1D
-from READ_INPUT_MEF1D import GET_VALUE_FROM_TXT_MEF1D_FINITO as gt
 
 
 def index(request):
-    return HttpResponse("index, baby")
+    return HttpResponse("index")
 
 
 def process(request):
+    data = request.body.decode()
+    filename = "data_" + str(time.time()) + ".txt"
+
+    with open(filename, "w") as file:
+        file.write(data)
+
     calc_data = MEF1D(FILENAME=filename)
 
     (
@@ -52,13 +58,11 @@ def process(request):
         "": SPRINGS.tolist(),
     }
 
-    # print(calc_data)
-
     for dict in calc_data:
         for key in dict:
             if type(dict[key]) is numpy.ndarray:
                 dict[key] = dict[key].tolist()
 
+    os.remove(filename)
     results = {"raw_data": raw_data, "calc_data": calc_data}
-    print(json.dumps(results))
-    return HttpResponse("process, ayaya")
+    return JsonResponse(results)
