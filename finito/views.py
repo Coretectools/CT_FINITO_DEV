@@ -64,5 +64,5 @@ def process(request):
                 dict[key] = dict[key].tolist()
 
     os.remove(filename)
-    results = {"raw_data": raw_data, "calc_data": calc_data}
+    results = {"rawData": raw_data, "calculatedData": calc_data}
     return JsonResponse(results)
