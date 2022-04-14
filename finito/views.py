@@ -1,7 +1,6 @@
 from FINITO_FEM_TOOLBOX import MEF1D, GET_VALUE_FROM_TXT_MEF1D_FINITO as gt
 from django.http import HttpResponse
 from django.http import JsonResponse
-from io import StringIO
 import numpy
 import time
 import os
